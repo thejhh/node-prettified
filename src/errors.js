@@ -94,8 +94,6 @@ errors.catchfail = function(opts, block) {
 		try {
 			return block.apply(self, args);
 		} catch(err) {
-			//errors.print('Exception', err);
-			//return error_callback(new error_type("Exception detected (" + err + "), check backlog for details."));
 			return error_callback(err);
 		}
 	};
