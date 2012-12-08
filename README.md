@@ -4,7 +4,7 @@ Prettified error handling for Node.js
 Installing
 ----------
 
-  npm install prettified
+	npm install prettified
 
 Pretty printing exceptions
 --------------------------
@@ -18,7 +18,7 @@ This sample code:
 		errors.print(err);
 	}
 
-...will print errors using console.error() like this:
+...will print errors using `console.error()` like this:
 
 	/---------------------------------- Error -----------------------------------\
 	| Error: Example error
@@ -32,13 +32,6 @@ This sample code:
 	|     at process.startup.processNextTick.process._tickCallback (node.js:244:9)
 	\----------------------------------------------------------------------------/
 
-Setting default error type
---------------------------
-
-You can set default error type for uncatched errors like this:
-
-	errors.setDefaultError(MySystemError);
-
 Catch errors inside callbacks
 -----------------------------
 
@@ -51,13 +44,25 @@ passes all original arguments and returns the value untouched.
 If exceptions are thrown it will catch them and print them using 
 `console.error()` or by using a handler specified in `opts`. Handlers 
 can be functions or Promise A defers (see 
-[q](http://documentup.com/kriskowal/q/)).
+[the q library](http://documentup.com/kriskowal/q/)).
+
+=== Example 1 ===
+
+You can simply wrap your existing callback handlers with `catchfail` like this:
+
+	require('fs').exists('test.txt', errors.catchfail(function(exists) {
+		console.log('test.txt ' + (exists ? 'exists' : 'not found') );
+	}));
+
+=== Example 2 without your own error handler ===
 
 For example you can use it to catch errors inside a callback:
 
 	setTimeout(errors.catchfail(function() {
 		throw new TypeError("Example error");
 	}), 200);
+
+=== Example 3 with an error handler ===
 
 If you like to handle the error you can pass an error handler as a 
 first argument:
@@ -69,4 +74,26 @@ first argument:
 		throw new TypeError("Example error");
 	}), 200);
 
-If you use defers from q you can 
+=== Example 4 with defers as an error handler ===
+
+You can also use defers from [the q library](http://documentup.com/kriskowal/q/) as an error handler:
+
+	function test() {
+		var defer = require('q').defer();
+		setTimeout(errors.catchfail(defer, function() {
+			throw new TypeError("Example error");
+		}), 200);
+		return defer.promise;
+	}
+	
+	test().fail(function(err) {
+		errors.print(err);
+	});
+
+Setting default error type
+--------------------------
+
+You can set default error type for uncatched errors like this:
+
+	errors.setDefaultError(MySystemError);
+
