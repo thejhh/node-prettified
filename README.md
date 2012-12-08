@@ -46,7 +46,7 @@ If exceptions are thrown it will catch them and print them using
 can be functions or Promise A defers (see 
 [the q library](http://documentup.com/kriskowal/q/)).
 
-=== Example 1 ===
+### Example 1
 
 You can simply wrap your existing callback handlers with `catchfail` like this:
 
@@ -54,7 +54,7 @@ You can simply wrap your existing callback handlers with `catchfail` like this:
 		console.log('test.txt ' + (exists ? 'exists' : 'not found') );
 	}));
 
-=== Example 2 without your own error handler ===
+### Example 2 without your own error handler
 
 For example you can use it to catch errors inside a callback:
 
@@ -62,7 +62,7 @@ For example you can use it to catch errors inside a callback:
 		throw new TypeError("Example error");
 	}), 200);
 
-=== Example 3 with an error handler ===
+### Example 3 with an error handler
 
 If you like to handle the error you can pass an error handler as a 
 first argument:
@@ -74,7 +74,7 @@ first argument:
 		throw new TypeError("Example error");
 	}), 200);
 
-=== Example 4 with defers as an error handler ===
+### Example 4 with defers as an error handler
 
 You can also use defers from [the q library](http://documentup.com/kriskowal/q/) as an error handler:
 
