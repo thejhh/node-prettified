@@ -54,15 +54,7 @@ You can simply wrap your existing callback handlers with `catchfail` like this:
 		console.log('test.txt ' + (exists ? 'exists' : 'not found') );
 	}));
 
-### Example 2 without your own error handler
-
-For example you can use it to catch errors inside a callback:
-
-	setTimeout(errors.catchfail(function() {
-		throw new TypeError("Example error");
-	}), 200);
-
-### Example 3 with an error handler
+### Example 2 -- with an error handler
 
 If you like to handle the error you can pass an error handler as a 
 first argument:
@@ -74,7 +66,7 @@ first argument:
 		throw new TypeError("Example error");
 	}), 200);
 
-### Example 4 with defers as an error handler
+### Example 3 -- with defers as an error handler
 
 You can also use defers from [the q library](http://documentup.com/kriskowal/q/) as an error handler:
 
