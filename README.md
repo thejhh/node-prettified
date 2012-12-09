@@ -4,33 +4,39 @@ Prettified error handling for Node.js
 Installing
 ----------
 
-	npm install prettified
+```
+npm install prettified
+```
 
 Pretty printing exceptions
 --------------------------
 
 This sample code:
 
-	var errors = require('prettified').errors;
-	try {
-		throw new Error("Example error");
-	} catch(err) {
-		errors.print(err);
-	}
+```javascript
+var errors = require('prettified').errors;
+try {
+	throw new Error("Example error");
+} catch(err) {
+	errors.print(err);
+}
+```
 
 ...will print errors using `console.error()` like this:
 
-	/---------------------------------- Error -----------------------------------\
-	| Error: Example error
-	+---------------------------------- stack -----------------------------------+
-	|     at Object.<anonymous> (/home/jhh/git/node-prettified/examples/format.js:3:8)
-	|     at Module._compile (module.js:449:26)
-	|     at Object.Module._extensions..js (module.js:467:10)
-	|     at Module.load (module.js:356:32)
-	|     at Function.Module._load (module.js:312:12)
-	|     at Module.runMain (module.js:492:10)
-	|     at process.startup.processNextTick.process._tickCallback (node.js:244:9)
-	\----------------------------------------------------------------------------/
+```
+/---------------------------------- Error -----------------------------------\
+| Error: Example error
++---------------------------------- stack -----------------------------------+
+|     at Object.<anonymous> (/home/jhh/git/node-prettified/examples/format.js:3:8)
+|     at Module._compile (module.js:449:26)
+|     at Object.Module._extensions..js (module.js:467:10)
+|     at Module.load (module.js:356:32)
+|     at Function.Module._load (module.js:312:12)
+|     at Module.runMain (module.js:492:10)
+|     at process.startup.processNextTick.process._tickCallback (node.js:244:9)
+\----------------------------------------------------------------------------/
+```
 
 Catch errors inside callbacks
 -----------------------------
@@ -50,42 +56,49 @@ can be functions or Promise A defers (see
 
 You can simply wrap your existing callback handlers with `catchfail` like this:
 
-	require('fs').exists('test.txt', errors.catchfail(function(exists) {
-		console.log('test.txt ' + (exists ? 'exists' : 'not found') );
-	}));
+```javascript
+require('fs').exists('test.txt', errors.catchfail(function(exists) {
+	console.log('test.txt ' + (exists ? 'exists' : 'not found') );
+}));
+```
 
 ### Example 2 -- with an error handler
 
 If you like to handle the error you can pass an error handler as a 
 first argument:
 
-	function do_error(err) {
-		errors.print(err);
-	}
-	setTimeout(errors.catchfail(do_error, function() {
-		throw new TypeError("Example error");
-	}), 200);
+```javascript
+function do_error(err) {
+	errors.print(err);
+}
+setTimeout(errors.catchfail(do_error, function() {
+	throw new TypeError("Example error");
+}), 200);
+```
 
 ### Example 3 -- with defers as an error handler
 
 You can also use defers from [the q library](http://documentup.com/kriskowal/q/) as an error handler:
 
-	function test() {
-		var defer = require('q').defer();
-		setTimeout(errors.catchfail(defer, function() {
-			throw new TypeError("Example error");
-		}), 200);
-		return defer.promise;
-	}
+```javascript
+function test() {
+	var defer = require('q').defer();
+	setTimeout(errors.catchfail(defer, function() {
+		throw new TypeError("Example error");
+	}), 200);
+	return defer.promise;
+}
 	
-	test().fail(function(err) {
-		errors.print(err);
-	});
+test().fail(function(err) {
+	errors.print(err);
+});
+```
 
 Setting default error type
 --------------------------
 
 You can set default error type for uncatched errors like this:
 
-	errors.setDefaultError(MySystemError);
-
+```javascript
+errors.setDefaultError(MySystemError);
+```
