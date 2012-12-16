@@ -28,7 +28,8 @@ errors.print = function(info, err) {
 	var title = '/' + line_buffer.substr(0, width) + ' ' + info + ' ' + line_buffer.substr(0, line_width - info.length - width - 4) + '\\';
 	console.error('\n' + title);
 	console.error(format_line("| ", err_str));
-	['stack', 'arguments', 'type', 'message'].map(function(key) {
+	//['stack', 'arguments', 'type', 'message']
+	Object.getOwnPropertyNames(err).map(function(key) {
 		if(!err[key]) return;
 		if( (key === 'message') && err_str.match(err[key]) ) return;
 		var w2 = Math.floor((line_width - 4 - key.length) / 2);
