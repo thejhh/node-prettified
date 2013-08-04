@@ -29,21 +29,23 @@ errors.print = function(info, err) {
 	console.error('\n' + title);
 	console.error(format_line("| ", err_str));
 	//['stack', 'arguments', 'type', 'message']
-	Object.getOwnPropertyNames(err).map(function(key) {
-		if(!err[key]) return;
-		if( (key === 'message') && err_str.match(err[key]) ) return;
-		var w2 = Math.floor((line_width - 4 - key.length) / 2);
-		console.error('+' + line_buffer.substr(0, w2) + ' ' + key + ' ' + line_buffer.substr(0, line_width - w2 - key.length - 4) + '+');
-		var rows = (err[key]!==undefined) ? (""+err[key]).split("\n") : [];
-		if(rows.length === 1) {
-			console.error('| ' + err[key]);
-			return;
-		}
-		if( (key === 'stack') && (rows[0] === err_str) ) {
-			rows.shift();
-		}
-		console.error('| ' + rows.join('\n| ') );
-	});
+	if(typeof err === 'object') {
+		Object.getOwnPropertyNames(err).map(function(key) {
+			if(!err[key]) return;
+			if( (key === 'message') && err_str.match(err[key]) ) return;
+			var w2 = Math.floor((line_width - 4 - key.length) / 2);
+			console.error('+' + line_buffer.substr(0, w2) + ' ' + key + ' ' + line_buffer.substr(0, line_width - w2 - key.length - 4) + '+');
+			var rows = (err[key]!==undefined) ? (""+err[key]).split("\n") : [];
+			if(rows.length === 1) {
+				console.error('| ' + err[key]);
+				return;
+			}
+			if( (key === 'stack') && (rows[0] === err_str) ) {
+				rows.shift();
+			}
+			console.error('| ' + rows.join('\n| ') );
+		});
+	}
 	console.error('\\' + line_buffer.substr(0, line_width - 2) + '/\n');
 };
 
