@@ -1,5 +1,6 @@
 /** Prettified Error Management */
 
+var util = require('util');
 var line_width = 78;
 var line_buffer = new Array(line_width).join("-");
 var default_error_type = Error;
