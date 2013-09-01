@@ -1,6 +1,6 @@
 {
   "name": "prettified",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Prettified error handling for Node.js",
   "main": "src/index.js",
   "directories": {
