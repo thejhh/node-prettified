@@ -14,7 +14,10 @@ errors.setDefaultError = function(type) {
 };
 
 /** Pretty print error messages */
-errors.print = function(info, err) {
+errors.print = function(info, err, print_func) {
+
+	print_func = ((typeof print_func === "function") && print_func) || console.error.bind(console);
+
 	function format_line(text, buf) {
 		var rows = buf.split("\n");
 		return ""+text + rows.join('\n'+text);
@@ -28,8 +31,8 @@ errors.print = function(info, err) {
 	var err_str_rows = err_str.split('\n');
 	var width = Math.floor((line_width - 4 - info.length) / 2);
 	var title = '/' + line_buffer.substr(0, width) + ' ' + info + ' ' + line_buffer.substr(0, line_width - info.length - width - 4) + '\\';
-	console.error('\n' + title);
-	console.error(format_line("| ", err_str));
+	print_func('\n' + title);
+	print_func(format_line("| ", err_str));
 	//['stack', 'arguments', 'type', 'message']
 	if(typeof err === 'object') {
 		Object.getOwnPropertyNames(err).map(function(key) {
@@ -37,10 +40,10 @@ errors.print = function(info, err) {
 			if(!err[key]) return;
 			if( (key === 'message') && err_str.match(err[key]) ) return;
 			var w2 = Math.floor((line_width - 4 - key.length) / 2);
-			console.error('+' + line_buffer.substr(0, w2) + ' ' + key + ' ' + line_buffer.substr(0, line_width - w2 - key.length - 4) + '+');
+			print_func('+' + line_buffer.substr(0, w2) + ' ' + key + ' ' + line_buffer.substr(0, line_width - w2 - key.length - 4) + '+');
 			var rows = (err[key]!==undefined) ? (''+err[key]).split("\n") : [];
 			if(rows.length === 1) {
-				console.error('| ' + rows.shift());
+				print_func('| ' + rows.shift());
 				return;
 			}
 			if(key === 'stack') {
@@ -50,10 +53,10 @@ errors.print = function(info, err) {
 					i += 1;
 				}
 			}
-			console.error('| ' + rows.join('\n| ') );
+			print_func('| ' + rows.join('\n| ') );
 		});
 	}
-	console.error('\\' + line_buffer.substr(0, line_width - 2) + '/\n');
+	print_func('\\' + line_buffer.substr(0, line_width - 2) + '/\n');
 };
 
 /* Check if value is function */
